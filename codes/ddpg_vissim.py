@@ -264,7 +264,7 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
 
                 s_t1 = env.make_observaton(raw_obs)
 
-                q_value = critic.model.predict_on_batch([np.asarray(s_t).reshape(1,28), np.asarray(a_t_original).reshape(1,2)])
+                q_value = critic.model.predict_on_batch([np.asarray(s_t).reshape(1,26), np.asarray(a_t_original).reshape(1,2)])
 
                 #f.write("Episode" + str(i) + " " + "Step" + str(j) + " " + "Action=" + str(ACTION) + " " + "aIDM=" + str(aIDM) + "\n")
 
