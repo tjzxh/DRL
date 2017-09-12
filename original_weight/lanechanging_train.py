@@ -124,8 +124,8 @@ S = Input(shape=[26])
 h0 = Dense(HIDDEN1_UNITS, activation='relu')(S)
 h1 = Dense(HIDDEN2_UNITS, activation='relu')(h0)
 
-Acceleration = Dense(1, activation='tanh', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
-LaneChanging = Dense(1, activation='sigmoid', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
+Acceleration = Dense(1, activation='tanh', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
+LaneChanging = Dense(1, activation='sigmoid', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
 V = merge([LaneChanging,Acceleration],mode='concat')
 model = Model(input=S,output=V)
 
