@@ -13,8 +13,6 @@ class VissimEnv:
     def __init__(self,raw_obs0):
         self.initial_run = True
         self.end=0
-        self.max_a=1.92
-        self.min_a=-1.97
         self.max_comfort=1.8
         self.max_v=22
         self.pre_raw_obs=raw_obs0
@@ -107,7 +105,7 @@ class VissimEnv:
                 reward = -1
 
         if abs(acceleration - self.pre_acceleration) > 0.56:
-            reward = -0.8
+            reward = -0.5
 
         #if LaneChanging == 1 or LaneChanging == 2:   #change a lane
             #if Dx5_diff < -Vx5_diff + 4.25:
@@ -118,8 +116,6 @@ class VissimEnv:
         self.pre_raw_obs=raw_obs
         
         self.pre_acceleration=acceleration
-
-        self.pre_LaneChanging = LaneChanging
 
         self.time_step += 1
 
@@ -139,10 +135,6 @@ class VissimEnv:
 
     def get_obs(self):
         return self.observation
-
-    def agent_to_vissim(self, u):
-        vissim_action = {'Acceleration': u[0]}
-        return vissim_action
 
     def make_observaton(self, raw_obs):
         Observation = np.array([raw_obs[0]/22, raw_obs[1]/2, raw_obs[4]/11, raw_obs[5]/100, raw_obs[6]/2, raw_obs[7]/4, raw_obs[8]/11, raw_obs[9]/100, raw_obs[10]/2, raw_obs[11]/4, raw_obs[12]/11, raw_obs[13]/100, raw_obs[14]/2, raw_obs[15]/4, raw_obs[16]/11, raw_obs[17]/100, raw_obs[18]/2, raw_obs[19]/4, raw_obs[20]/11, raw_obs[21]/100, raw_obs[22]/2, raw_obs[23]/4, raw_obs[24]/11, raw_obs[25]/100, raw_obs[26]/2, raw_obs[27]/4])

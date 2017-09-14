@@ -153,41 +153,13 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
 
                 a_t_original = actor.model.predict(s_t.reshape(1, s_t.shape[0]))
 
-
-
-                #ac = ac_or[index]
-
-                #noise_t[0][0] = train_indicator * max(epsilon, 0) * OU.function(ac, 0.02, 1.00,                                                                                        0.10)
-                #noise_t[0][1] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][1],  0.5 , 1.00, 0.10)
-                #noise_t[0][2] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][2], -0.1 , 1.00, 0.05)
-
-
-
-                #a_t[0][3] = ac + noise_t[0][0]
-                #a_t[0][1] = a_t_original[0][1] + noise_t[0][1]
-                #a_t[0][2] = a_t_original[0][2] + noise_t[0][2]
-
-                #The following code do the stochastic brake
-                #if a_t[0][0]<0:
-                    #if random.random() <= 0.1:
-                        #print("********Now we apply the brake***********")
-                        #a_t[0][0] += train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][0],  0.1 , 1.00, 0.10)
-
-
-
                 a_t[0][0] = a_t_original[0][0]
-                #a_t[0][1] = lc[0][1]
-                #a_t[0][2] = lc[0][2]
                 a_t[0][1] = a_t_original[0][1]
-
-
 
                 if a_t[0][1] > 0:
                     acceleration = a_t[0][1] * 3.5
                 else:
                     acceleration = a_t[0][1] * 8
-
-
 
                 if  0 <= a_t[0][0] and a_t[0][0] <= 0.1739523314093953:
                     LaneChanging = 0

@@ -61,8 +61,9 @@ class ActorNetwork(object):
         h1 = Dense(HIDDEN2_UNITS, activation='relu')(h0)
         #Steering = Dense(1,activation='tanh',init=lambda shape, name: normal(shape, scale=1e-4, name=name))(h1)  
         #Acceleration = Dense(1,activation='tanh',init=lambda shape, name: normal(shape, scale=1e-4, name=name), kernel_regularizer=regularizers.l2(0.01))(h1)
-        Acceleration = Dense(1, activation='tanh', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
-        LaneChanging = Dense(1, activation='sigmoid', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)(h1)
+        
+        Acceleration = Dense(1, activation='tanh', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=regularizers.l1(0.001), kernel_constraint=None, bias_constraint=None)(h1)
+        LaneChanging = Dense(1, activation='sigmoid', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=regularizers.l1(0.001), kernel_constraint=None, bias_constraint=None)(h1)
         #Brake = Dense(1,activation='sigmoid',init=lambda shape, name: normal(shape, scale=1e-4, name=name))(h1) 
         V = merge([LaneChanging,Acceleration],mode='concat')
 
