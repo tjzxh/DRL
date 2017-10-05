@@ -26,8 +26,8 @@ from random import choice
 OU = OU()       #Ornstein-Uhlenbeck Process
 
 def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
-    BUFFER_SIZE = 10000
-    BATCH_SIZE = 50
+    BUFFER_SIZE = 100000
+    BATCH_SIZE = 32
     GAMMA = 0.99
     TAU = 0.001     #Target Network HyperParameters
     LRA = 0.0001    #Learning rate for Actor
@@ -147,14 +147,17 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
                 loss = 0
                 epsilon -= 1.0 / EXPLORE
                 a_t = np.zeros([1,action_dim])
-                
-
-
+                noise_t = np.zeros([1, action_dim])
 
                 a_t_original = actor.model.predict(s_t.reshape(1, s_t.shape[0]))
 
-                a_t[0][0] = a_t_original[0][0]
-                a_t[0][1] = a_t_original[0][1]
+                noise_t[0][0] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][0], 0.0, 0.60, 0.30)
+                noise_t[0][1] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][1], 0.02, 1.00, 0.10)
+
+
+
+                a_t[0][0] = a_t_original[0][0]+noise_t[0][0]
+                a_t[0][1] = a_t_original[0][1]+noise_t[0][1]
 
                 if a_t[0][1] > 0:
                     acceleration = a_t[0][1] * 3.5

@@ -1,5 +1,4 @@
 import numpy as np
-import math
 from keras import regularizers
 from keras import initializers
 from keras.initializers import normal, identity
@@ -25,27 +24,20 @@ class ActorNetwork(object):
         K.set_session(sess)
 
         #Now create the model
-        self.model , self.weights, self.state = self.create_actor_network(state_size, action_size)   
-        self.target_model, self.target_weights, self.target_state = self.create_actor_network(state_size, action_size) 
+        self.model , self.weights, self.state = self.create_actor_network(state_size, action_size)
+        self.target_model, self.target_weights, self.target_state = self.create_actor_network(state_size, action_size)
         self.action_gradient = tf.placeholder(tf.float32,[None, action_size])
-
         self.params_grad = tf.gradients(self.model.output, self.weights, -self.action_gradient)
-
         grads = zip(self.params_grad, self.weights)
         self.optimize = tf.train.AdamOptimizer(LEARNING_RATE).apply_gradients(grads)
-        self.sess.run(tf.global_variables_initializer())
+        self.sess.run(tf.initialize_all_variables())
+        #self.sess.run(tf.global_variables_initializer())
 
     def train(self, states, action_grads):
         self.sess.run(self.optimize, feed_dict={
             self.state: states,
             self.action_gradient: action_grads
         })
-
-    def final_grads(self, states, action_grads):
-        return self.sess.run(self.params_grad, feed_dict={
-            self.state: states,
-            self.action_gradient: action_grads
-        })[0]
 
     def target_train(self):
         actor_weights = self.model.get_weights()
@@ -61,12 +53,10 @@ class ActorNetwork(object):
         h1 = Dense(HIDDEN2_UNITS, activation='relu')(h0)
         #Steering = Dense(1,activation='tanh',init=lambda shape, name: normal(shape, scale=1e-4, name=name))(h1)  
         #Acceleration = Dense(1,activation='tanh',init=lambda shape, name: normal(shape, scale=1e-4, name=name), kernel_regularizer=regularizers.l2(0.01))(h1)
-        
         Acceleration = Dense(1, activation='tanh', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=regularizers.l1(0.001), kernel_constraint=None, bias_constraint=None)(h1)
         LaneChanging = Dense(1, activation='sigmoid', use_bias=True, kernel_initializer=initializers.VarianceScaling(scale=1e-4, mode='fan_in', distribution='normal', seed=None), bias_initializer='zeros', kernel_regularizer=regularizers.l2(0.01), bias_regularizer=None, activity_regularizer=regularizers.l1(0.001), kernel_constraint=None, bias_constraint=None)(h1)
         #Brake = Dense(1,activation='sigmoid',init=lambda shape, name: normal(shape, scale=1e-4, name=name))(h1) 
         V = merge([LaneChanging,Acceleration],mode='concat')
-
         model = Model(input=S,output=V)
         return model, model.trainable_weights, S
 
