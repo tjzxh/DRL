@@ -61,10 +61,10 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
     #Now load the weight
     print("Now we load the weight")
     try:
-        actor.model.load_weights("train_actor_lanechanging.h5")
+        actor.model.load_weights("actormodel.h5")
         print("actor Weight load successfully")
 
-        actor.target_model.load_weights("train_actor_model.h5")
+        actor.target_model.load_weights("actor_target_model.h5")
         
     except:
         print("Cannot find the actor weight")
