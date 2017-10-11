@@ -90,9 +90,9 @@ X=X.T
 
 laneChange = np.zeros(len(raw_obs))
 for i in range(raw_obs.shape[1]):
-    if raw_obs[i,28]==1:#left change
+    if raw_obs[i,29]==1:#No change
         laneChange[i] = random.uniform(0.1739523314093953, 1-0.1739523314093953)
-    if raw_obs[i,29]==1:# NO change
+    if raw_obs[i,28]==1:# left change
         laneChange[i] = random.uniform(0,0.1739523314093953)
     if raw_obs[i,30]==1:#right change
         laneChange[i] = random.uniform(1-0.1739523314093953, 1)
