@@ -165,9 +165,9 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
                     acceleration = a_t[0][1] * 8
 
                 if  0 <= a_t[0][0] and a_t[0][0] <= 0.1739523314093953:
-                    LaneChanging = 0
-                elif a_t[0][0] > 0.1739523314093953 and a_t[0][0] <= 1-0.1739523314093953:
                     LaneChanging = 1
+                elif a_t[0][0] > 0.1739523314093953 and a_t[0][0] <= 1-0.1739523314093953:
+                    LaneChanging = 0
                 else:
                     LaneChanging = 2
                     
